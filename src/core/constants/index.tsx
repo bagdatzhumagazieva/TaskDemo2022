@@ -1,6 +1,7 @@
 import React from "react";
 import {Button} from "@mui/material";
 import {GridColDef, GridValueGetterParams} from "@mui/x-data-grid";
+import {IEmployee} from "../interfaces";
 
 export const COLUMNS: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -43,3 +44,14 @@ export const COLUMNS: GridColDef[] = [
         },
     }
 ];
+
+
+export const INIT_EMPLOYEE: IEmployee = {
+    id: 0,
+    name: '',
+    surname: '',
+    monthlySalary: 0,
+    earlySalary: 0,
+    taxesCompany: 0,
+    taxesEmployee: 0,
+}

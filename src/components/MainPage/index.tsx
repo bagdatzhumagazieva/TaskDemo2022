@@ -1,43 +1,42 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import { COLUMNS } from "../../core/constants";
+import {AddNewEmployee} from "../AddNewEmployee";
+import {IEmployee} from "../../core/interfaces";
+import {ROWS} from "./mock";
+
+interface IRow extends IEmployee {
+    actionEdit: string;
+    actionDelete: string;
+}
 
 export const MainPage: React.FC = () => {
+    const [createModal, setCreateModal] = useState<boolean>(false);
+    const [state, setState] = useState<IRow[]>(ROWS);
 
-    const rows = [
-        { id: 1, name: 'hello', surname: 'Snow',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-        { id: 2, name: 'hello', surname: 'Lannister',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-        { id: 3, name: 'hello', surname: 'Lannister',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-        { id: 4, name: 'hello', surname: 'Stark',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-        { id: 5, name: 'hello', surname: 'Targaryen',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-        { id: 6, name: 'hello', surname: 'Melisandre',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-        { id: 7, name: 'hello', surname: 'Clifford',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-        { id: 8, name: 'hello', surname: 'Frances',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-        { id: 9, name: 'hello', surname: 'Roxie',monthlySalary: 120000, earlySalary: 120000,
-            taxesCompany: 3000,   taxesEmployee: 2000, actionEdit: 'Edit', actionDelete: 'delete'},
-    ];
+    const onCreate = (data: IEmployee) => {
+        setState([...state, { ...data, id: state.length + 1, actionDelete: '', actionEdit: '' }]);
+    };
 
     return (
         <>
-            <Button variant="contained">Add new employee</Button>
+            <Button variant="contained" onClick={() => setCreateModal(true)}>Add new employee</Button>
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={rows}
+                    rows={state}
                     columns={COLUMNS}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
                 />
             </div>
+
+            <AddNewEmployee
+                open={createModal}
+                onClose={() => setCreateModal(false)}
+                onClick={onCreate}
+            />
         </>
     );
 }
