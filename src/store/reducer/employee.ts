@@ -18,7 +18,7 @@ export const employeeSlice = createSlice({
             state.employees = action.payload;
         },
         setCreateEmployee(state, action: PayloadAction<IEmployee>) {
-            state.employees = [...state.employees, { ...action.payload, id: state.employees.length + 1 }];
+            state.employees = [...state.employees, { ...action.payload, id: state.employees[state.employees.length-1].id + 1 }];
         },
         setEditEmployee(state, action: PayloadAction<IEmployee>) {
             const n = action.payload;
