@@ -1,5 +1,5 @@
 import React from "react";
-import {Dialog, DialogTitle, DialogContent, DialogActions, Button} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 
 interface IProps {
     open: boolean;
@@ -9,6 +9,11 @@ interface IProps {
 }
 
 export const DeleteModal = ({open, fullName, onCancel, onDelete}:IProps) => {
+
+    const handleDel = () => {
+        onDelete();
+        onCancel();
+    };
 
     return (
         <Dialog open={open} onClose={onCancel}>
@@ -20,7 +25,7 @@ export const DeleteModal = ({open, fullName, onCancel, onDelete}:IProps) => {
 
             <DialogActions>
                 <Button onClick={onCancel} variant='contained'>Cancel</Button>
-                <Button variant='contained' color='error' onClick={onDelete}>Delete</Button>
+                <Button variant='contained' color='error' onClick={handleDel}>Delete</Button>
             </DialogActions>
         </Dialog>
     )

@@ -1,45 +1,32 @@
 import React, {useState} from 'react';
-import {Button} from "@mui/material";
-import {DataGrid} from '@mui/x-data-grid';
-import {AddNewEmployee} from "../EmployeeModal";
-import {IEmployee, IRow, ETypes, COLUMNS} from "../../core";
-import {ROWS} from "./mock";
-import {DeleteModal} from "../DeleteModal";
-
+import { Button } from "@mui/material";
+import { DataGrid } from '@mui/x-data-grid';
+import { AddNewEmployee } from "../EmployeeModal";
+import { IEmployee, IRow, ETypes, COLUMNS } from "../../core";
+import { DeleteModal } from "../DeleteModal";
+import { useAppSelector } from "../../store";
+import { UseEmployee } from "../../store/actions/employee";
 
 export const MainPage: React.FC = () => {
     const [createModal, setCreateModal] = useState<boolean>(false);
     const [editEmployee, setEditEmployee] = useState<IRow>();
     const [deleteEmp, setDelete] = useState<IRow>();
-    const [state, setState] = useState<IRow[]>(ROWS);
+
+    /** store */
+    const { employees } = useAppSelector(
+        (employeeState) => employeeState.employee
+    );
+
+    const { onCreateEmployee, onEditEmployee, onDelete } = UseEmployee();
 
     const onCreateEdit = (data: IEmployee) => (type: ETypes) => {
         if (type === ETypes.EDIT) {
-            onEdit(data)
-        } else {
-            const newData = { ...data, id: state.length + 1, actionDelete: '', actionEdit: '' };
-            setState([...state, newData]);
-        }
-    };
-
-    const onEdit = (data: IEmployee) => {
-        if (editEmployee) {
-            const newList = state.map(e => e.id === editEmployee.id ? {...editEmployee, ...data} : e);
-            setState(newList);
+            onEditEmployee(data);
             setEditEmployee(undefined);
+        } else {
+            onCreateEmployee(data);
         }
     };
-
-    const onDelete = () => {
-        if (deleteEmp) {
-            const index = state.findIndex(e => e.id === deleteEmp.id);
-            const newData = [...state];
-            newData.splice(index, 1);
-            setState(newData);
-
-            setDelete(undefined)
-        }
-    }
 
     return (
         <>
@@ -47,7 +34,7 @@ export const MainPage: React.FC = () => {
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={state}
+                    rows={employees.map(e => ({...e, actionEdit: '', actionDelete: ''}))}
                     columns={COLUMNS(setEditEmployee, setDelete)}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
@@ -76,7 +63,7 @@ export const MainPage: React.FC = () => {
                     open
                     fullName={`${deleteEmp.name} ${deleteEmp.surname}`}
                      onCancel={() => setDelete(undefined)}
-                    onDelete={onDelete}
+                    onDelete={() => onDelete(deleteEmp.id)}
                 />
             )}
 
