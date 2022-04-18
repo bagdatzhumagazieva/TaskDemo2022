@@ -1,20 +1,22 @@
 import React from "react";
 import {Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button} from "@mui/material";
 import {Controller, useForm } from "react-hook-form";
-import {IEmployee, INIT_EMPLOYEE} from "../../core";
+import {IEmployee, ETypes, INIT_EMPLOYEE} from "../../core";
 
 interface IProps {
     open: boolean;
+    type: ETypes;
+    initData?: IEmployee;
     onClose(): void;
     onClick(v: IEmployee): void;
 }
 
-export const AddNewEmployee = ({open, onClose, onClick}:IProps) => {
+export const AddNewEmployee = ({open, type, initData, onClose, onClick}:IProps) => {
 
     const methods = useForm<IEmployee>({
         mode: 'onChange',
         reValidateMode: 'onChange',
-        defaultValues: INIT_EMPLOYEE,
+        defaultValues: type === ETypes.CREATE ? INIT_EMPLOYEE : (initData || INIT_EMPLOYEE),
     });
 
     const inputs = [
@@ -110,7 +112,7 @@ export const AddNewEmployee = ({open, onClose, onClick}:IProps) => {
 
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button variant='contained' onClick={handleClick}>Create</Button>
+                <Button variant='contained' onClick={handleClick}>{type}</Button>
             </DialogActions>
         </Dialog>
     )

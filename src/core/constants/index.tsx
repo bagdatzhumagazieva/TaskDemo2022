@@ -1,9 +1,9 @@
 import React from "react";
 import {Button} from "@mui/material";
 import {GridColDef, GridValueGetterParams} from "@mui/x-data-grid";
-import {IEmployee} from "../interfaces";
+import {IEmployee, IRow} from "../interfaces";
 
-export const COLUMNS: GridColDef[] = [
+export const COLUMNS = (handleEdit: (v: IRow) => void): GridColDef[] => [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'name', headerName: 'First name', width: 200 },
     { field: 'surname', headerName: 'Last name', width: 200 },
@@ -31,7 +31,13 @@ export const COLUMNS: GridColDef[] = [
         headerName: ' ',
         width: 120,
         renderCell: (params: GridValueGetterParams) => {
-            return <Button color="secondary" variant="outlined">Edit</Button>
+            return <Button
+                color="secondary"
+                variant="outlined"
+                onClick={() => handleEdit(params.row)}
+            >
+                Edit
+            </Button>
         },
 
     },

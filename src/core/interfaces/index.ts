@@ -7,3 +7,8 @@ export interface IEmployee {
     taxesCompany: number;
     taxesEmployee: number;
 }
+
+export interface IRow extends IEmployee {
+    actionEdit: string;
+    actionDelete: string;
+}
